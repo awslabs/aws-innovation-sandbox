@@ -1,0 +1,746 @@
+Parameters:
+  AppstreamManagementAccountName:
+    Type: String
+    Description: Account Name for Appstream Management Account
+  SandboxAccountName:
+    Type: String
+    Description: Account Name for Sandbox Account
+  AppstreamManagementAccountEmail:
+    Type: String
+    Description: Email for Appstream Management Account
+  SandboxAccountEmail:
+    Type: String
+    Description: Email for Sandbox Account
+  SandboxOUName:
+    Type: String
+    Description: OU Name for Sandbox Account
+  AppstreamManagementOUName:
+    Type: String
+    Description: OU Name for Appstream Management Account
+Resources:
+  CreateAccountOURolePolicy6A78E603:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+          - Action:
+              - organizations:ListRoots
+              - organizations:MoveAccount
+              - organizations:DescribeCreateAccountStatus
+              - organizations:ListParents
+              - organizations:ListAccounts
+              - organizations:ListOrganizationalUnitsForParent
+              - organizations:CreateOrganizationalUnit
+              - organizations:CreateAccount
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: CreateAccountOURolePolicy6A78E603
+      Roles:
+        - Ref: l0roleBD657D29
+    DependsOn:
+      - l0roleBD657D29
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Create_Account_OU_Role_Policy/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W12
+            reason: Specified actions do not apply to specific resources
+  l0roleBD657D29:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l0role/Resource
+  CreateAccountOU43324AB7:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l0roleBD657D29
+          - Arn
+      Handler: innovation_create_account_ou.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - CreateAccountOURolePolicy6A78E603
+      - l0roleBD657D29
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Create_Account_OU/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationCreateAccountOU:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CreateAccountOU43324AB7
+          - Arn
+      Mgmt_Name:
+        Ref: AppstreamManagementAccountName
+      Mgmt_Email:
+        Ref: AppstreamManagementAccountEmail
+      Sbx_Name:
+        Ref: SandboxAccountName
+      Sbx_Email:
+        Ref: SandboxAccountEmail
+      Sbx_OU_Name:
+        Ref: SandboxOUName
+      Mgmt_OU_Name:
+        Ref: AppstreamManagementOUName
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_Create_Account_OU/Default
+  l1role35F8C866:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l1role/Resource
+  l1roleDefaultPolicy980E9EE3:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+        Version: "2012-10-17"
+      PolicyName: l1roleDefaultPolicy980E9EE3
+      Roles:
+        - Ref: l1role35F8C866
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l1role/DefaultPolicy/Resource
+  DeleteDefaultVPCs69C07E47:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l1role35F8C866
+          - Arn
+      Handler: innovation_delete_default_vpcs.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - l1roleDefaultPolicy980E9EE3
+      - l1role35F8C866
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Delete_Default_VPCs/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationDeleteDefaultVPCs:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - DeleteDefaultVPCs69C07E47
+          - Arn
+      Appstream_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Appstream_Account_ID
+      Sandbox_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Sandbox_Account_ID
+    DependsOn:
+      - InnovationCreateAccountOU
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_Delete_Default_VPCs/Default
+  l2role69319EAA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l2role/Resource
+  l2roleDefaultPolicy8236CDE6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+        Version: "2012-10-17"
+      PolicyName: l2roleDefaultPolicy8236CDE6
+      Roles:
+        - Ref: l2role69319EAA
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l2role/DefaultPolicy/Resource
+  RunMgmtStack4783694C:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l2role69319EAA
+          - Arn
+      Handler: innovation_run_mgmt_stack.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - l2roleDefaultPolicy8236CDE6
+      - l2role69319EAA
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Run_Mgmt_Stack/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationRunMgmtStack:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - RunMgmtStack4783694C
+          - Arn
+      Appstream_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Appstream_Account_ID
+      Sandbox_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Sandbox_Account_ID
+      Template_Base_Path:
+        Fn::Join:
+          - ""
+          - - https://undefined-
+            - Ref: AWS::Region
+            - .s3.amazonaws.com/undefined/%%VERSION%%/
+    DependsOn:
+      - InnovationDeleteDefaultVPCs
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_Run_Mgmt_Stack/Default
+  l3role61B393CD:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l3role/Resource
+  l3roleDefaultPolicy9803DF35:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+        Version: "2012-10-17"
+      PolicyName: l3roleDefaultPolicy9803DF35
+      Roles:
+        - Ref: l3role61B393CD
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l3role/DefaultPolicy/Resource
+  TGWResourceShareBB856A09:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l3role61B393CD
+          - Arn
+      Handler: innovation_accept_resource_share.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - l3roleDefaultPolicy9803DF35
+      - l3role61B393CD
+    Metadata:
+      aws:cdk:path: InnovationSandbox/TGW_Resource_Share/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationAcceptResourceShare:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - TGWResourceShareBB856A09
+          - Arn
+      Sandbox_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Sandbox_Account_ID
+    DependsOn:
+      - InnovationRunMgmtStack
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_Accept_Resource_Share/Default
+  l4roleF446F1EF:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l4role/Resource
+  l4roleDefaultPolicy8550EE28:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+        Version: "2012-10-17"
+      PolicyName: l4roleDefaultPolicy8550EE28
+      Roles:
+        - Ref: l4roleF446F1EF
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l4role/DefaultPolicy/Resource
+  RunSbxStack93A1B944:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l4roleF446F1EF
+          - Arn
+      Handler: innovation_run_sbx_stack.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - l4roleDefaultPolicy8550EE28
+      - l4roleF446F1EF
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Run_Sbx_Stack/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationRunSbxStack:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - RunSbxStack93A1B944
+          - Arn
+      Appstream_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Appstream_Account_ID
+      Sandbox_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Sandbox_Account_ID
+      Tgw_ID:
+        Fn::GetAtt:
+          - InnovationRunMgmtStack
+          - TGW_ID
+      EIP:
+        Fn::GetAtt:
+          - InnovationRunMgmtStack
+          - EIP
+      EIP2:
+        Fn::GetAtt:
+          - InnovationRunMgmtStack
+          - EIP2
+      Template_Base_Path:
+        Fn::Join:
+          - ""
+          - - https://undefined-
+            - Ref: AWS::Region
+            - .s3.amazonaws.com/undefined/%%VERSION%%/
+    DependsOn:
+      - InnovationAcceptResourceShare
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_Run_Sbx_Stack/Default
+  l5role92F088EA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l5role/Resource
+  l5roleDefaultPolicy830E2F91:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+        Version: "2012-10-17"
+      PolicyName: l5roleDefaultPolicy830E2F91
+      Roles:
+        - Ref: l5role92F088EA
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l5role/DefaultPolicy/Resource
+  TGWRouteTables56E457E7:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l5role92F088EA
+          - Arn
+      Handler: innovation_tgw_route_tables.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - l5roleDefaultPolicy830E2F91
+      - l5role92F088EA
+    Metadata:
+      aws:cdk:path: InnovationSandbox/TGW_Route_Tables/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationTGWRouteTables:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - TGWRouteTables56E457E7
+          - Arn
+      Appstream_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Appstream_Account_ID
+      Tgw_ID:
+        Fn::GetAtt:
+          - InnovationRunMgmtStack
+          - TGW_ID
+      Egress_Attach:
+        Fn::GetAtt:
+          - InnovationRunMgmtStack
+          - EGRESS_ATTACH_ID
+      Sbx_Attach:
+        Fn::GetAtt:
+          - InnovationRunSbxStack
+          - SBX_Attach_ID
+      Template_Base_Path:
+        Fn::Join:
+          - ""
+          - - https://undefined-
+            - Ref: AWS::Region
+            - .s3.amazonaws.com/undefined/%%VERSION%%/
+    DependsOn:
+      - InnovationRunSbxStack
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_TGW_Route_Tables/Default
+  l6role22D9B41F:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: InnovationSandbox/l6role/Resource
+  SBXSCPRolePolicy2C2F2B57:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${AWS::StackName}*:*
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Resource: arn:aws:iam::*:role/SandboxAdminExecutionRole
+          - Action: organizations:CreatePolicy
+            Effect: Allow
+            Resource: "*"
+          - Action: organizations:AttachPolicy
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:organizations::${AWS::AccountId}:*/*
+        Version: "2012-10-17"
+      PolicyName: SBXSCPRolePolicy2C2F2B57
+      Roles:
+        - Ref: l6role22D9B41F
+    Metadata:
+      aws:cdk:path: InnovationSandbox/SBX_SCP_Role_Policy/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W12
+            reason: CreatePolicy action does not apply to specific resource
+  SBXSCPB59FCFE7:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Join:
+            - ""
+            - - undefined-
+              - Ref: AWS::Region
+        S3Key: undefined/%%VERSION%%/InnovationSandbox.zip
+      Role:
+        Fn::GetAtt:
+          - l6role22D9B41F
+          - Arn
+      Handler: innovation_sbx_attach_scp.main
+      Runtime: python3.8
+      Timeout: 900
+    DependsOn:
+      - l6role22D9B41F
+    Metadata:
+      aws:cdk:path: InnovationSandbox/SBX_SCP/Resource
+      cfn_nag:
+        rules_to_suppress:
+          - id: W58
+            reason: Lambda function already has permission to write CloudWatch Logs
+  InnovationAttachSCPs:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - SBXSCPB59FCFE7
+          - Arn
+      Sandbox_Account_ID:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Sandbox_Account_ID
+      Sandbox_OU:
+        Fn::GetAtt:
+          - InnovationCreateAccountOU
+          - Sandbox_OU
+      SCPGD:
+        Fn::Sub: ${AWS::StackName}_guardrails_scp
+      SCPNTWRK:
+        Fn::Sub: ${AWS::StackName}_network_scp
+      Template_Base_Path:
+        Fn::Join:
+          - ""
+          - - https://undefined-
+            - Ref: AWS::Region
+            - .s3.amazonaws.com/undefined/%%VERSION%%/
+    DependsOn:
+      - InnovationTGWRouteTables
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: InnovationSandbox/Innovation_Attach_SCPs/Default
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAAE02PwQrCMBBEv6X3dGtBBG9CwaulfkHcpJC2yUqyUSTk321aBE8zs8M+dls4H6GtLvIdalRzk5C8hnRnibMYdKDoUYtudL300mrWvoT/4hb5GVl05AL7iFxma1CGDbksCjgZaSH1tBj8bKzdDbRshKJZLNI+lIR0jQ7Laml+PgtcKKqRvJUlQxcDk/2dkbNwpDRMoXm16zsnOFRTMKb20bGxGoZdv4ErPUvtAAAA
+    Metadata:
+      aws:cdk:path: InnovationSandbox/CDKMetadata/Default
+    Condition: CDKMetadataAvailable
+Outputs:
+  ManagementAccountID:
+    Description: Account ID of the Management Account
+    Value:
+      Fn::GetAtt:
+        - InnovationCreateAccountOU
+        - Appstream_Account_ID
+  SandboxAccountID:
+    Description: Account ID of the Sandbox Account
+    Value:
+      Fn::GetAtt:
+        - InnovationCreateAccountOU
+        - Sandbox_Account_ID
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - af-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
+

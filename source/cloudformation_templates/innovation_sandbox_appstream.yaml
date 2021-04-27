@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: 'AppStream 2.0 CloudFormation Template'
+
+Parameters:
+  AppStreamSubnet1: 
+    Type: AWS::EC2::Subnet::Id
+    Description: (Required) Select a subnet for an AppStream 2.0 fleet
+  AppStreamSubnet2: 
+    Type: AWS::EC2::Subnet::Id
+    Description: (Required) Select a subnet for an AppStream 2.0 fleet
+  AppStreamSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: (Required) Select a security group for an AppStream 2.0 fleet
+  AppStreamStackName:
+    Type: String
+    Description: (Required) AppStream 2.0 Stack Name
+    Default: AppStreamSandboxSample
+  AppStreamFleetName:
+    Type: String
+    Description: (Required) AppStream 2.0 Fleet Name
+    Default: AppStreamSandboxFleet
+  AppStreamImageArn:  
+    Type: String
+    Default: "Amazon-AppStream2-Sample-Image-02-04-2019"
+  AppStreamInstanceType:
+    Type: String
+    Description: AppStream 2.0 Stack InstanceType
+    Default: stream.standard.medium
+  UserEmail:
+    Type: String
+    Description: Email id of the User
+  FirstName:
+    Type: String
+    Description: First Name of the User
+  LastName:
+    Type: String
+    Description: Last Name of the User     
+
+Resources:
+
+  AppStreamStack:
+    Type: AWS::AppStream::Stack
+    Properties:
+      Description: AppStream 2.0 Sandbox
+      DisplayName: AppStream 2.0 Sandbox Accounts
+      Name: !Ref AppStreamStackName
+    
+
+  AppStreamFleet:
+    Type: AWS::AppStream::Fleet
+    Properties:
+      ComputeCapacity:
+        DesiredInstances: 1
+      Description:  AppStream 2.0 Fleet
+      DisconnectTimeoutInSeconds: 360
+      MaxUserDurationInSeconds: 57600
+      IdleDisconnectTimeoutInSeconds: 0
+      DisplayName: AppStream 2.0 Sandbox Fleet
+      EnableDefaultInternetAccess: False
+      FleetType: ON_DEMAND
+      ImageName: !Ref AppStreamImageArn
+      InstanceType: !Ref AppStreamInstanceType
+      Name: !Ref AppStreamFleetName
+      VpcConfig:
+        SubnetIds:
+          - !Ref AppStreamSubnet1
+          - !Ref AppStreamSubnet2
+        SecurityGroupIds:
+          - !Ref AppStreamSecurityGroup
+  
+  AppStreamStackFleetAssociation:
+    Type: AWS::AppStream::StackFleetAssociation
+    Properties: 
+      FleetName: !Ref AppStreamFleet
+      StackName: !Ref AppStreamStack
+    DependsOn: 
+    - AppStreamFleet
+    - AppStreamStack
+
+
+  AppStreamUser:
+    Type: "AWS::AppStream::User"
+    Properties:
+      UserName: !Ref UserEmail
+      FirstName: !Ref FirstName
+      LastName: !Ref LastName
+      AuthenticationType: "USERPOOL"
+
+  AppStreamStackUserAssociation:
+    Type: "AWS::AppStream::StackUserAssociation"
+    Properties:
+      AuthenticationType: "USERPOOL"
+      UserName: !Ref UserEmail
+      StackName: !Ref AppStreamStack
+      SendEmailNotification: True
+    DependsOn:
+     - AppStreamStack
+     - AppStreamUser

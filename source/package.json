@@ -1,0 +1,43 @@
+{
+    "name": "cdk_typescript",
+    "version": "0.1.0",
+    "bin": {
+        "cdk_typescript": "bin/cdk_typescript.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w",
+        "test": "jest",
+        "cdk": "cdk"
+    },
+    "devDependencies": {
+        "@aws-cdk/assert": "1.94.1",
+        "@types/jest": "^25.2.1",
+        "@types/node": "10.17.5",
+        "jest": "^25.5.0",
+        "ts-jest": "^25.3.1",
+        "ts-node": "^8.1.0",
+        "typescript": "~3.7.2"
+    },
+    "dependencies": {
+        "@aws-cdk/aws-appstream": "^1.94.1",
+        "@aws-cdk/aws-cloudformation": "^1.94.1",
+        "@aws-cdk/aws-cloudtrail": "^1.94.1",
+        "@aws-cdk/aws-ec2": "^1.94.1",
+        "@aws-cdk/aws-events": "^1.94.1",
+        "@aws-cdk/aws-events-targets": "^1.94.1",
+        "@aws-cdk/aws-iam": "^1.94.1",
+        "@aws-cdk/aws-lambda": "^1.94.1",
+        "@aws-cdk/aws-ram": "^1.94.1",
+        "@aws-cdk/aws-s3": "^1.94.1",
+        "@aws-cdk/aws-sns": "1.94.1",
+        "@aws-cdk/aws-sns-subscriptions": "1.94.1",
+        "@aws-cdk/aws-sqs": "1.94.1",
+        "@aws-cdk/aws-stepfunctions": "^1.94.1",
+        "@aws-cdk/aws-stepfunctions-tasks": "^1.94.1",
+        "@aws-cdk/core": "^1.94.1",
+        "@aws-cdk/custom-resources": "^1.94.1",
+        "aws-cdk": "^1.94.1",
+        "aws-ssm": "^0.3.11"
+    }
+}

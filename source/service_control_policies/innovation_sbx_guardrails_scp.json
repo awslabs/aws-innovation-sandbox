@@ -1,0 +1,79 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+            "Sid": "SBGRCloudtrail",
+            "Effect": "Deny",
+            "Action": [
+                "cloudtrail:DeleteTrail",
+                "cloudtrail:PutEventSelectors",
+                "cloudtrail:StopLogging",
+                "cloudtrail:UpdateTrail"
+            ],
+            "Resource": [
+                "arn:aws:cloudtrail:*:*:trail/sandbox-*"
+            ],
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/SandboxAdminExecutionRole"
+                }
+            }
+        },
+        {
+            "Sid": "SBGRIAMACCESS",
+            "Effect": "Deny",
+            "NotAction": [
+                "iam:GenerateCredentialReport",
+                "iam:GenerateServiceLastAccessedDetails",
+                "iam:Get*",
+                "iam:List*",
+                "iam:PassRole",
+                "iam:SimulateCustomPolicy",
+                "iam:SimulatePrincipalPolicy",
+                "iam:ChangePassword",
+                "iam:CreateAccessKey",
+                "iam:UpdateAccessKey"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:*"
+            ],
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/SandboxAdminExecutionRole"
+                }
+            }
+        },
+        {
+            "Sid": "GRAUDITBUCKETPOLICYC",
+            "Resource": [
+                "arn:aws:s3:::sandbox-ct-*",
+                "arn:aws:s3:::sandbox-fl-*"
+            ],
+            "Effect": "Deny",
+            "Action": [
+                "s3:PutBucketAcl",
+                "s3:PutBucketPolicy",
+                "s3:PutLifecycleConfiguration",
+                "s3:DeleteBucket",
+                "s3:DeleteObject"
+            ],
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/SandboxAdminExecutionRole"
+                }
+            }
+        },
+        {
+            "Sid": "GRS3PUBLICACCESSCHANGESPROHIBITED",
+            "Resource": "*",
+            "Effect": "Deny",
+            "Action": [
+                "s3:PutAccountPublicAccessBlock"
+            ],
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:role/SandboxAdminExecutionRole"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,2462 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InnovationSandboxMain 1`] = `
+Object {
+  "Outputs": Object {
+    "ManagementAccountID": Object {
+      "Description": "Account ID of the Management Account",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "InnovationCreateAccountOU",
+          "Appstream_Account_ID",
+        ],
+      },
+    },
+    "SandboxAccountID": Object {
+      "Description": "Account ID of the Sandbox Account",
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "InnovationCreateAccountOU",
+          "Sandbox_Account_ID",
+        ],
+      },
+    },
+  },
+  "Parameters": Object {
+    "AppstreamManagementAccountEmail": Object {
+      "Description": "Email for Appstream Management Account",
+      "Type": "String",
+    },
+    "AppstreamManagementAccountName": Object {
+      "Description": "Account Name for Appstream Management Account",
+      "Type": "String",
+    },
+    "AppstreamManagementOUName": Object {
+      "Description": "OU Name for Appstream Management Account",
+      "Type": "String",
+    },
+    "SandboxAccountEmail": Object {
+      "Description": "Email for Sandbox Account",
+      "Type": "String",
+    },
+    "SandboxAccountName": Object {
+      "Description": "Account Name for Sandbox Account",
+      "Type": "String",
+    },
+    "SandboxOUName": Object {
+      "Description": "OU Name for Sandbox Account",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "InnovationAcceptResourceShare": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "InnovationRunMgmtStack",
+      ],
+      "Properties": Object {
+        "Sandbox_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Sandbox_Account_ID",
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaAcceptResourceShare53C1ADB9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InnovationAttachSCPs": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "InnovationTGWRouteTables",
+      ],
+      "Properties": Object {
+        "SCPGD": Object {
+          "Fn::Sub": "\${AWS::StackName}_guardrails_scp",
+        },
+        "SCPNTWRK": Object {
+          "Fn::Sub": "\${AWS::StackName}_network_scp",
+        },
+        "Sandbox_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Sandbox_Account_ID",
+          ],
+        },
+        "Sandbox_OU": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Sandbox_OU",
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaSBXSCPEDC9A83A",
+            "Arn",
+          ],
+        },
+        "Template_Base_Path": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://Sample-",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3.amazonaws.com/InvSbx/v1.0.0/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InnovationCreateAccountOU": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "Mgmt_Email": Object {
+          "Ref": "AppstreamManagementAccountEmail",
+        },
+        "Mgmt_Name": Object {
+          "Ref": "AppstreamManagementAccountName",
+        },
+        "Mgmt_OU_Name": Object {
+          "Ref": "AppstreamManagementOUName",
+        },
+        "Sbx_Email": Object {
+          "Ref": "SandboxAccountEmail",
+        },
+        "Sbx_Name": Object {
+          "Ref": "SandboxAccountName",
+        },
+        "Sbx_OU_Name": Object {
+          "Ref": "SandboxOUName",
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaCreateAccountOUCA63B0CB",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InnovationDeleteDefaultVPCs": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "InnovationCreateAccountOU",
+      ],
+      "Properties": Object {
+        "Appstream_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Appstream_Account_ID",
+          ],
+        },
+        "Sandbox_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Sandbox_Account_ID",
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaDeleteDefaultVPCs0A285588",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InnovationRunMgmtStack": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "InnovationDeleteDefaultVPCs",
+      ],
+      "Properties": Object {
+        "Appstream_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Appstream_Account_ID",
+          ],
+        },
+        "Sandbox_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Sandbox_Account_ID",
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaRunMgmtStack481473C4",
+            "Arn",
+          ],
+        },
+        "Template_Base_Path": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://Sample-",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3.amazonaws.com/InvSbx/v1.0.0/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InnovationRunSbxStack": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "InnovationAcceptResourceShare",
+      ],
+      "Properties": Object {
+        "Appstream_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Appstream_Account_ID",
+          ],
+        },
+        "EIP": Object {
+          "Fn::GetAtt": Array [
+            "InnovationRunMgmtStack",
+            "EIP",
+          ],
+        },
+        "EIP2": Object {
+          "Fn::GetAtt": Array [
+            "InnovationRunMgmtStack",
+            "EIP2",
+          ],
+        },
+        "Sandbox_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Sandbox_Account_ID",
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaRunSbxStack7412D7F1",
+            "Arn",
+          ],
+        },
+        "Template_Base_Path": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://Sample-",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3.amazonaws.com/InvSbx/v1.0.0/",
+            ],
+          ],
+        },
+        "Tgw_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationRunMgmtStack",
+            "TGW_ID",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "InnovationTGWRouteTables": Object {
+      "DeletionPolicy": "Delete",
+      "DependsOn": Array [
+        "InnovationRunSbxStack",
+      ],
+      "Properties": Object {
+        "Appstream_Account_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationCreateAccountOU",
+            "Appstream_Account_ID",
+          ],
+        },
+        "Egress_Attach": Object {
+          "Fn::GetAtt": Array [
+            "InnovationRunMgmtStack",
+            "EGRESS_ATTACH_ID",
+          ],
+        },
+        "Sbx_Attach": Object {
+          "Fn::GetAtt": Array [
+            "InnovationRunSbxStack",
+            "SBX_Attach_ID",
+          ],
+        },
+        "ServiceToken": Object {
+          "Fn::GetAtt": Array [
+            "SingletonLambdaTGWRouteTables57D15059",
+            "Arn",
+          ],
+        },
+        "Template_Base_Path": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "https://Sample-",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ".s3.amazonaws.com/InvSbx/v1.0.0/",
+            ],
+          ],
+        },
+        "Tgw_ID": Object {
+          "Fn::GetAtt": Array [
+            "InnovationRunMgmtStack",
+            "TGW_ID",
+          ],
+        },
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SingletonLambdaAcceptResourceShare53C1ADB9": Object {
+      "DependsOn": Array [
+        "l3roleDefaultPolicy9803DF35",
+        "l3role61B393CD",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_accept_resource_share.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l3role61B393CD",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "SingletonLambdaCreateAccountOUCA63B0CB": Object {
+      "DependsOn": Array [
+        "l0roleDefaultPolicy0F8AE3F3",
+        "l0roleBD657D29",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_create_account_ou.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l0roleBD657D29",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "SingletonLambdaDeleteDefaultVPCs0A285588": Object {
+      "DependsOn": Array [
+        "l1roleDefaultPolicy980E9EE3",
+        "l1role35F8C866",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_delete_default_vpcs.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l1role35F8C866",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "SingletonLambdaRunMgmtStack481473C4": Object {
+      "DependsOn": Array [
+        "l2roleDefaultPolicy8236CDE6",
+        "l2role69319EAA",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_run_mgmt_stack.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l2role69319EAA",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "SingletonLambdaRunSbxStack7412D7F1": Object {
+      "DependsOn": Array [
+        "l4roleDefaultPolicy8550EE28",
+        "l4roleF446F1EF",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_run_sbx_stack.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l4roleF446F1EF",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "SingletonLambdaSBXSCPEDC9A83A": Object {
+      "DependsOn": Array [
+        "l6roleDefaultPolicyD1323A8E",
+        "l6role22D9B41F",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_sbx_attach_scp.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l6role22D9B41F",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "SingletonLambdaTGWRouteTables57D15059": Object {
+      "DependsOn": Array [
+        "l5roleDefaultPolicy830E2F91",
+        "l5role92F088EA",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "Sample-",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+              ],
+            ],
+          },
+          "S3Key": "InvSbx/v1.0.0/InnovationSandbox.zip",
+        },
+        "Handler": "innovation_tgw_route_tables.main",
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "l5role92F088EA",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.8",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "l0roleBD657D29": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l0roleDefaultPolicy0F8AE3F3": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+            Object {
+              "Action": Array [
+                "organizations:ListRoots",
+                "organizations:MoveAccount",
+                "organizations:DescribeCreateAccountStatus",
+                "organizations:ListParents",
+                "organizations:ListAccounts",
+                "organizations:ListOrganizationalUnitsForParent",
+                "organizations:CreateOrganizationalUnit",
+                "organizations:CreateAccount",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l0roleDefaultPolicy0F8AE3F3",
+        "Roles": Array [
+          Object {
+            "Ref": "l0roleBD657D29",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "l1role35F8C866": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l1roleDefaultPolicy980E9EE3": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l1roleDefaultPolicy980E9EE3",
+        "Roles": Array [
+          Object {
+            "Ref": "l1role35F8C866",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "l2role69319EAA": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l2roleDefaultPolicy8236CDE6": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l2roleDefaultPolicy8236CDE6",
+        "Roles": Array [
+          Object {
+            "Ref": "l2role69319EAA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "l3role61B393CD": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l3roleDefaultPolicy9803DF35": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l3roleDefaultPolicy9803DF35",
+        "Roles": Array [
+          Object {
+            "Ref": "l3role61B393CD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "l4roleDefaultPolicy8550EE28": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l4roleDefaultPolicy8550EE28",
+        "Roles": Array [
+          Object {
+            "Ref": "l4roleF446F1EF",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "l4roleF446F1EF": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l5role92F088EA": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l5roleDefaultPolicy830E2F91": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l5roleDefaultPolicy830E2F91",
+        "Roles": Array [
+          Object {
+            "Ref": "l5role92F088EA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "l6role22D9B41F": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "l6roleDefaultPolicyD1323A8E": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:logs:\${AWS::Region}:\${AWS::AccountId}:log-group:/aws/lambda/\${AWS::StackName}*:*",
+              },
+            },
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": "arn:aws:iam::*:role/SandboxAdminExecutionRole",
+            },
+            Object {
+              "Action": "organizations:CreatePolicy",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": "organizations:AttachPolicy",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Sub": "arn:aws:organizations::\${AWS::AccountId}:*/*",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "l6roleDefaultPolicyD1323A8E",
+        "Roles": Array [
+          Object {
+            "Ref": "l6role22D9B41F",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;
+
+exports[`InnovationSandboxMgmt 1`] = `
+Object {
+  "Parameters": Object {
+    "SbxAccountId": Object {
+      "Description": "SbxAccountId",
+      "Type": "String",
+    },
+    "UUID": Object {
+      "Description": "UUID",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CloudTrailA62D711D": Object {
+      "DependsOn": Array [
+        "mgmtbucketPolicy0C4C568E",
+      ],
+      "Properties": Object {
+        "EnableLogFileValidation": true,
+        "EventSelectors": Array [],
+        "IncludeGlobalServiceEvents": true,
+        "IsLogging": true,
+        "IsMultiRegionTrail": true,
+        "S3BucketName": Object {
+          "Ref": "mgmtbucket71519174",
+        },
+        "TrailName": "mgmt-cloudtrail",
+      },
+      "Type": "AWS::CloudTrail::Trail",
+    },
+    "FlowLogsFlowLog13041F74": Object {
+      "Properties": Object {
+        "LogDestination": Object {
+          "Fn::GetAtt": Array [
+            "mgmtflowlogsbucket5BA94782",
+            "Arn",
+          ],
+        },
+        "LogDestinationType": "s3",
+        "ResourceId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+        "ResourceType": "VPC",
+        "TrafficType": "ALL",
+      },
+      "Type": "AWS::EC2::FlowLog",
+    },
+    "ISAppStreamMgmtVPC7423BC26": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "ISAppStreamMgmtVPCIGWD8F23F1A": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "ISAppStreamMgmtVPCVPCGWDC210076": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "ISAppStreamMgmtVPCIGWD8F23F1A",
+        },
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1DefaultRoute6A3C9021": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1NATGateway070AEBC5",
+        },
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1RouteTable8C69A9E4",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1RouteTable8C69A9E4": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/private_innovation_mgmtSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1RouteTableAssociationC02DCECE": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1RouteTable8C69A9E4",
+        },
+        "SubnetId": Object {
+          "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1Subnet70686A5C",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1Subnet70686A5C": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.2.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "private_innovation_mgmt",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/private_innovation_mgmtSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2DefaultRoute040A1498": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2NATGatewayA73C22D8",
+        },
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2RouteTable925CE157",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2RouteTable925CE157": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/private_innovation_mgmtSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2RouteTableAssociation6BB3EE33": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2RouteTable925CE157",
+        },
+        "SubnetId": Object {
+          "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2Subnet58B91D59",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2Subnet58B91D59": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.3.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "private_innovation_mgmt",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/private_innovation_mgmtSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1DefaultRoute4ECEBDDE": Object {
+      "DependsOn": Array [
+        "ISAppStreamMgmtVPCVPCGWDC210076",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "ISAppStreamMgmtVPCIGWD8F23F1A",
+        },
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1RouteTable3532B91B",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1EIP4D40A779": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1NATGateway070AEBC5": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1EIP4D40A779",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1Subnet96C4417D",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1RouteTable3532B91B": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1RouteTableAssociation6F9C2C4C": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1RouteTable3532B91B",
+        },
+        "SubnetId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1Subnet96C4417D",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1Subnet96C4417D": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public_innovation_mgmt",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2DefaultRoute60FAA522": Object {
+      "DependsOn": Array [
+        "ISAppStreamMgmtVPCVPCGWDC210076",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "ISAppStreamMgmtVPCIGWD8F23F1A",
+        },
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2RouteTable76B2FB56",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2EIP995FD5A6": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2NATGatewayA73C22D8": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2EIP995FD5A6",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2Subnet6F2580C7",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2RouteTable76B2FB56": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2RouteTableAssociation40C14A3E": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2RouteTable76B2FB56",
+        },
+        "SubnetId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2Subnet6F2580C7",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2Subnet6F2580C7": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            1,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public_innovation_mgmt",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxManagementTestStack/ISAppStreamMgmtVPC/public_innovation_mgmtSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ISTGWShareAppStream": Object {
+      "Properties": Object {
+        "Name": "ISTGWShareAppStream",
+        "Principals": Array [
+          Object {
+            "Ref": "SbxAccountId",
+          },
+        ],
+        "ResourceArns": Array [
+          Object {
+            "Fn::Sub": "arn:aws:ec2:\${AWS::Region}:\${AWS::AccountId}:transit-gateway/\${ISTransitGateway}",
+          },
+        ],
+      },
+      "Type": "AWS::RAM::ResourceShare",
+    },
+    "ISTransitGateway": Object {
+      "Properties": Object {
+        "AutoAcceptSharedAttachments": "enable",
+        "DefaultRouteTableAssociation": "disable",
+        "DefaultRouteTablePropagation": "disable",
+        "Description": "IS Transit Gateway",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "IS Transit Gateway",
+          },
+        ],
+        "VpnEcmpSupport": "disable",
+      },
+      "Type": "AWS::EC2::TransitGateway",
+    },
+    "ISTransitGatewayAttachmentEgress": Object {
+      "DependsOn": Array [
+        "ISTransitGateway",
+      ],
+      "Properties": Object {
+        "SubnetIds": Array [
+          Object {
+            "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet1Subnet70686A5C",
+          },
+          Object {
+            "Ref": "ISAppStreamMgmtVPCprivateinnovationmgmtSubnet2Subnet58B91D59",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "IS-TG-Egress-VPC-Private_SubNet-Attachment",
+          },
+        ],
+        "TransitGatewayId": Object {
+          "Ref": "ISTransitGateway",
+        },
+        "VpcId": Object {
+          "Ref": "ISAppStreamMgmtVPC7423BC26",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayAttachment",
+    },
+    "InnovationSandboxManagementTestStackISAppStreamMgmtVPCpublicinnovationmgmtSubnet1A87FA391": Object {
+      "DependsOn": Array [
+        "ISTransitGatewayAttachmentEgress",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "192.168.0.0/16",
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet1RouteTable3532B91B",
+        },
+        "TransitGatewayId": Object {
+          "Ref": "ISTransitGateway",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "InnovationSandboxManagementTestStackISAppStreamMgmtVPCpublicinnovationmgmtSubnet2CA34F995": Object {
+      "DependsOn": Array [
+        "ISTransitGatewayAttachmentEgress",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "192.168.0.0/16",
+        "RouteTableId": Object {
+          "Ref": "ISAppStreamMgmtVPCpublicinnovationmgmtSubnet2RouteTable76B2FB56",
+        },
+        "TransitGatewayId": Object {
+          "Ref": "ISTransitGateway",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "mgmtbucket71519174": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "KMSMasterKeyID": Object {
+                  "Fn::GetAtt": Array [
+                    "mgmtbucketKey06B9C676",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "BucketName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "mgmt-ct-",
+              Object {
+                "Ref": "UUID",
+              },
+            ],
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mgmtbucketKey06B9C676": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Created by InnovationSandboxManagementTestStack/mgmt-bucket",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mgmtbucketPolicy0C4C568E": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "mgmtbucket71519174",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetBucketAcl",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "cloudtrail.amazonaws.com",
+              },
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "mgmtbucket71519174",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:PutObject",
+              "Condition": Object {
+                "StringEquals": Object {
+                  "s3:x-amz-acl": "bucket-owner-full-control",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "cloudtrail.amazonaws.com",
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "mgmtbucket71519174",
+                        "Arn",
+                      ],
+                    },
+                    "/AWSLogs/",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "mgmtflowlogsbucket5BA94782": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "KMSMasterKeyID": Object {
+                  "Fn::GetAtt": Array [
+                    "mgmtflowlogsbucketKey81555781",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "BucketName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "mgmt-fl-",
+              Object {
+                "Ref": "UUID",
+              },
+            ],
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mgmtflowlogsbucketKey81555781": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Created by InnovationSandboxManagementTestStack/mgmt-flowlogs-bucket",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
+
+exports[`InnovationSandboxSbx 1`] = `
+Object {
+  "Parameters": Object {
+    "EIP": Object {
+      "Description": "EIP",
+      "Type": "String",
+    },
+    "EIP2": Object {
+      "Description": "EIP",
+      "Type": "String",
+    },
+    "MgmtID": Object {
+      "Description": "MgmtID",
+      "Type": "String",
+    },
+    "TgwID": Object {
+      "Description": "TgwID",
+      "Type": "String",
+    },
+    "UUID": Object {
+      "Description": "UUID",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "CloudTrailA62D711D": Object {
+      "DependsOn": Array [
+        "sandboxbucketPolicy3505C1DD",
+      ],
+      "Properties": Object {
+        "EnableLogFileValidation": true,
+        "EventSelectors": Array [],
+        "IncludeGlobalServiceEvents": true,
+        "IsLogging": true,
+        "IsMultiRegionTrail": true,
+        "S3BucketName": Object {
+          "Ref": "sandboxbucket88D01CB1",
+        },
+        "TrailName": "sandbox-cloudtrail",
+      },
+      "Type": "AWS::CloudTrail::Trail",
+    },
+    "FlowLogsFlowLog13041F74": Object {
+      "Properties": Object {
+        "LogDestination": Object {
+          "Fn::GetAtt": Array [
+            "sandboxflowlogsbucket1E067CBE",
+            "Arn",
+          ],
+        },
+        "LogDestinationType": "s3",
+        "ResourceId": Object {
+          "Ref": "ISSBXVPCA7ADE657",
+        },
+        "ResourceType": "VPC",
+        "TrafficType": "ALL",
+      },
+      "Type": "AWS::EC2::FlowLog",
+    },
+    "ISSBXVPCA7ADE657": Object {
+      "Properties": Object {
+        "CidrBlock": "192.168.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxSbxTestStack/ISSBXVPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "ISSBXVPCprivateinnovationsandbox1Subnet1RouteTable73CE5343": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxSbxTestStack/ISSBXVPC/private_innovation_sandbox_1Subnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISSBXVPCA7ADE657",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ISSBXVPCprivateinnovationsandbox1Subnet1RouteTableAssociationC373FC4A": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ISSBXVPCprivateinnovationsandbox1Subnet1RouteTable73CE5343",
+        },
+        "SubnetId": Object {
+          "Ref": "ISSBXVPCprivateinnovationsandbox1Subnet1Subnet28A493C3",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ISSBXVPCprivateinnovationsandbox1Subnet1Subnet28A493C3": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "192.168.0.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "private_innovation_sandbox_1",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxSbxTestStack/ISSBXVPC/private_innovation_sandbox_1Subnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISSBXVPCA7ADE657",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ISSBXVPCprivateinnovationsandbox2Subnet1RouteTableAssociationCB576240": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "ISSBXVPCprivateinnovationsandbox2Subnet1RouteTableD429FD4A",
+        },
+        "SubnetId": Object {
+          "Ref": "ISSBXVPCprivateinnovationsandbox2Subnet1Subnet0011FAE5",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "ISSBXVPCprivateinnovationsandbox2Subnet1RouteTableD429FD4A": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxSbxTestStack/ISSBXVPC/private_innovation_sandbox_2Subnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISSBXVPCA7ADE657",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "ISSBXVPCprivateinnovationsandbox2Subnet1Subnet0011FAE5": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "192.168.1.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "private_innovation_sandbox_2",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "InnovationSandboxSbxTestStack/ISSBXVPC/private_innovation_sandbox_2Subnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "ISSBXVPCA7ADE657",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "ISTransitGatewayAttachmentSbx": Object {
+      "Properties": Object {
+        "SubnetIds": Array [
+          Object {
+            "Ref": "ISSBXVPCprivateinnovationsandbox1Subnet1Subnet28A493C3",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "IS-TG-Sbx-VPC-Private_SubNet-Attachment",
+          },
+        ],
+        "TransitGatewayId": Object {
+          "Ref": "TgwID",
+        },
+        "VpcId": Object {
+          "Ref": "ISSBXVPCA7ADE657",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayAttachment",
+    },
+    "InnovationSandboxSbxTestStackISSBXVPCprivateinnovationsandbox1Subnet1ED7B4123": Object {
+      "DependsOn": Array [
+        "ISTransitGatewayAttachmentSbx",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "RouteTableId": Object {
+          "Ref": "ISSBXVPCprivateinnovationsandbox1Subnet1RouteTable73CE5343",
+        },
+        "TransitGatewayId": Object {
+          "Ref": "TgwID",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "InnovationSandboxSbxTestStackISSBXVPCprivateinnovationsandbox2Subnet14FB452AB": Object {
+      "DependsOn": Array [
+        "ISTransitGatewayAttachmentSbx",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "RouteTableId": Object {
+          "Ref": "ISSBXVPCprivateinnovationsandbox2Subnet1RouteTableD429FD4A",
+        },
+        "TransitGatewayId": Object {
+          "Ref": "TgwID",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "ManagedPolicy7BAB786E": Object {
+      "Properties": Object {
+        "Description": "",
+        "Path": "/",
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "*",
+              "Condition": Object {
+                "IpAddress": Object {
+                  "aws:SourceIp": Array [
+                    Object {
+                      "Ref": "EIP",
+                    },
+                    Object {
+                      "Ref": "EIP2",
+                    },
+                    "10.0.0.0/16",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16",
+                  ],
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "AllowAppStreamIPs",
+            },
+            Object {
+              "Action": "*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:ViaAWSService": "true",
+                },
+              },
+              "Effect": "Allow",
+              "Resource": "*",
+              "Sid": "AllowAWSServiceCalls",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "SandboxEC2InstanceProfile": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "SandboxServiceRoleDAAF0320",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "SandboxLoginRole3E38BC4D": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "MgmtID",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Ref": "ManagedPolicy7BAB786E",
+          },
+        ],
+        "RoleName": "SandboxLoginRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "SandboxServiceRoleDAAF0320": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Array [
+                  "apigateway.amazonaws.com",
+                  "athena.amazonaws.com",
+                  "autoscaling.amazonaws.com",
+                  "cloudtrail.amazonaws.com",
+                  "config-multiaccountsetup.amazonaws.com",
+                  "config.amazonaws.com",
+                  "dynamodb.amazonaws.com",
+                  "dynamodb.application-autoscaling.amazonaws.com",
+                  Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "ec2.",
+                        Object {
+                          "Ref": "AWS::URLSuffix",
+                        },
+                      ],
+                    ],
+                  },
+                  "ec2.application-autoscaling.amazonaws.com",
+                  "ec2fleet.amazonaws.com",
+                  "ec2scheduled.amazonaws.com",
+                  "ecs-tasks.amazonaws.com",
+                  "ecs.amazonaws.com",
+                  "ecs.application-autoscaling.amazonaws.com",
+                  "edgelambda.amazonaws.com",
+                  "eks.amazonaws.com",
+                  "firehose.amazonaws.com",
+                  "glue.amazonaws.com",
+                  "greengrass.amazonaws.com",
+                  "guardduty.amazonaws.com",
+                  "health.amazonaws.com",
+                  "iam.amazonaws.com",
+                  "kinesis.amazonaws.com",
+                  "kinesisanalytics.amazonaws.com",
+                  "kms.amazonaws.com",
+                  "lakeformation.amazonaws.com",
+                  "lambda.amazonaws.com",
+                  "macie.amazonaws.com",
+                  "opsworks-cm.amazonaws.com",
+                  "opsworks.amazonaws.com",
+                  "organizations.amazonaws.com",
+                  "quicksight.amazonaws.com",
+                  "rds.amazonaws.com",
+                  "redshift.amazonaws.com",
+                  "rekognition.amazonaws.com",
+                  "s3.amazonaws.com",
+                  "sagemaker.amazonaws.com",
+                  "secretsmanager.amazonaws.com",
+                  "servicecatalog.amazonaws.com",
+                  "sns.amazonaws.com",
+                  "spotfleet.amazonaws.com",
+                  "sqs.amazonaws.com",
+                  "ssm.amazonaws.com",
+                  "sso.amazonaws.com",
+                  Object {
+                    "Fn::Join": Array [
+                      "",
+                      Array [
+                        "states.",
+                        Object {
+                          "Ref": "AWS::Region",
+                        },
+                        ".amazonaws.com",
+                      ],
+                    ],
+                  },
+                  "storagegateway.amazonaws.com",
+                  "sts.amazonaws.com",
+                  "support.amazonaws.com",
+                  "swf.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "RoleName": "SandboxServiceRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "SandboxServiceRoleDefaultPolicyBD0FD366": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "*",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SandboxServiceRoleDefaultPolicyBD0FD366",
+        "Roles": Array [
+          Object {
+            "Ref": "SandboxServiceRoleDAAF0320",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "sandboxbucket88D01CB1": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "KMSMasterKeyID": Object {
+                  "Fn::GetAtt": Array [
+                    "sandboxbucketKeyBC519F90",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "BucketName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "sandbox-ct-",
+              Object {
+                "Ref": "UUID",
+              },
+            ],
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "sandboxbucketKeyBC519F90": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Created by InnovationSandboxSbxTestStack/sandbox-bucket",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "sandboxbucketPolicy3505C1DD": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "sandboxbucket88D01CB1",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:GetBucketAcl",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "cloudtrail.amazonaws.com",
+              },
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "sandboxbucket88D01CB1",
+                  "Arn",
+                ],
+              },
+            },
+            Object {
+              "Action": "s3:PutObject",
+              "Condition": Object {
+                "StringEquals": Object {
+                  "s3:x-amz-acl": "bucket-owner-full-control",
+                },
+              },
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "cloudtrail.amazonaws.com",
+              },
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    Object {
+                      "Fn::GetAtt": Array [
+                        "sandboxbucket88D01CB1",
+                        "Arn",
+                      ],
+                    },
+                    "/AWSLogs/",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "sandboxflowlogsbucket1E067CBE": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "KMSMasterKeyID": Object {
+                  "Fn::GetAtt": Array [
+                    "sandboxflowlogsbucketKey6D9F42E1",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "BucketName": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "sandbox-fl-",
+              Object {
+                "Ref": "UUID",
+              },
+            ],
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "sandboxflowlogsbucketKey6D9F42E1": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Created by InnovationSandboxSbxTestStack/sandbox-flowlogs-bucket",
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
+
+exports[`InnovationSandboxTgw 1`] = `
+Object {
+  "Parameters": Object {
+    "EGREEATTCH": Object {
+      "Description": "EGREEATTCH",
+      "Type": "String",
+    },
+    "SBXTGATTCH": Object {
+      "Description": "SBXTGATTCH",
+      "Type": "String",
+    },
+    "TGID": Object {
+      "Description": "TGID",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "AssocForEgressVPC": Object {
+      "Properties": Object {
+        "TransitGatewayAttachmentId": Object {
+          "Ref": "EGREEATTCH",
+        },
+        "TransitGatewayRouteTableId": Object {
+          "Ref": "RouteTowardsSBX",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayRouteTableAssociation",
+    },
+    "AssocForSbx": Object {
+      "Properties": Object {
+        "TransitGatewayAttachmentId": Object {
+          "Ref": "SBXTGATTCH",
+        },
+        "TransitGatewayRouteTableId": Object {
+          "Ref": "RouteTowardsIGW",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayRouteTableAssociation",
+    },
+    "RouteFromEgressVPCToSbxForCallBack": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "192.168.0.0/16",
+        "TransitGatewayAttachmentId": Object {
+          "Ref": "SBXTGATTCH",
+        },
+        "TransitGatewayRouteTableId": Object {
+          "Ref": "RouteTowardsSBX",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayRoute",
+    },
+    "RouteFromSbxToEgressVPC": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "TransitGatewayAttachmentId": Object {
+          "Ref": "EGREEATTCH",
+        },
+        "TransitGatewayRouteTableId": Object {
+          "Ref": "RouteTowardsIGW",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayRoute",
+    },
+    "RouteTowardsIGW": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Route Towards IGW - Innovation Sandbox",
+          },
+        ],
+        "TransitGatewayId": Object {
+          "Ref": "TGID",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayRouteTable",
+    },
+    "RouteTowardsSBX": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "Route Towards SBX - Innovation Sandbox",
+          },
+        ],
+        "TransitGatewayId": Object {
+          "Ref": "TGID",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayRouteTable",
+    },
+  },
+}
+`;
