@@ -42,7 +42,7 @@ AWS Solutions use two buckets: a bucket for global access to templates, which is
 - Declare environment variables
 ```
 export REGION=aws-region-code # the AWS region to launch the solution (e.g. us-east-1)
-export BUCKET-NAME=my-bucket-name # bucket where customized code will reside
+export BUCKET_PREFIX=my-bucket-name # bucket where customized code will reside
 export SOLUTION_NAME=my-solution-name # the solution name
 export VERSION=my-version # version number for the customized code
 ```
