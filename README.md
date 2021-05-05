@@ -100,12 +100,12 @@ Upload the files listed below to your regional bucket in the following pattern:
 aws s3 sync ./regional-s3-assets/ s3://<regional-bucketname>/aws-innovation-sandbox/<version>/
 ```
 The following files will be copied:
-InnovationSandboxManagementAccount.template
-InnovationSandboxSbxAccount.template
-InnovationSandboxTransitGatewaySetup.template 
-innovation_sbx_guardrails_scp.json
-innovation_sbx_network_controls_scp.json
-InnovationSandbox.zip
+- InnovationSandboxManagementAccount.template  
+- InnovationSandboxSbxAccount.template  
+- InnovationSandboxTransitGatewaySetup.template  
+- innovation_sbx_guardrails_scp.json  
+- innovation_sbx_network_controls_scp.json  
+- InnovationSandbox.zip  
 
 
 ## Deploy
