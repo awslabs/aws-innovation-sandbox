@@ -82,23 +82,27 @@ From the *deployment* folder in your cloned repo, run build-s3-dist.sh, passing 
 
 ```
 chmod +x build-s3-dist.sh
-build-s3-dist.sh <bucketname> aws-innovation-sandbox <version>
+build-s3-dist.sh <global-bucketname> aws-innovation-sandbox <version>
 ```
 
 
 **Upload to your buckets**
 
 Upload the InnovationSandbox.template to your global bucket.
+```
+aws s3 cp ./global-s3-assets/InnovationSandbox.template s3://<global-bucketname>/aws-innovation-sandbox/<version>/
+```
+
 
 Upload the files listed below to your regional bucket in the following pattern:
 
 ```
-s3://mybucket-us-east-1/aws-innovation-sandbox/v1.3.3/<file name> (lambda Code)
+aws s3 sync ./regional-s3-assets/ s3://<regional-bucketname>/aws-innovation-sandbox/<version>/
 ```
-
-InnovationSandboxManagementAccount.ts 
-InnovationSandboxSbxAccount.ts
-InnovationSandboxTransitGatewaySetup.ts 
+The following files will be copied:
+InnovationSandboxManagementAccount.template
+InnovationSandboxSbxAccount.template
+InnovationSandboxTransitGatewaySetup.template 
 innovation_sbx_guardrails_scp.json
 innovation_sbx_network_controls_scp.json
 InnovationSandbox.zip
