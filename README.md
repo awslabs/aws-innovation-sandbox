@@ -47,24 +47,25 @@ export SOLUTION_NAME=my-solution-name # the solution name
 export VERSION=my-version # version number for the customized code
 ```
 
-- Create S3 Bucket
+- Create S3 Buckets
 From the AWS CLI
 ```
-aws s3 mb s3://$DIST_OUTPUT_BUCKET-$REGION --region $REGION
+aws s3 mb s3://$BUCKET_PREFIX --region $REGION
+aws s3 mb s3://$BUCKET_PREFIX-$REGION --region $REGION
 ```
 
 From the *deployment* folder in your cloned repo, run build-s3-dist.sh, passing the root name of your bucket (ex. mybucket), name of the solution i.e. aws-innovation-sandbox and the version you are building (ex. v1.3.3). We recommend using a similar version based on the version downloaded from GitHub (ex. GitHub: v1.3.3, your build: v1.3.3.mybuild)
 
 ```
 chmod +x build-s3-dist.sh
-build-s3-dist.sh <global-bucketname> aws-innovation-sandbox <version>
+source build-s3-dist.sh $BUCKET_PREFIX $SOLUTION_NAME $VERSION
 ```
 
 **Upload to your buckets**
 
 ```
-aws s3 sync ./regional-s3-assets/ s3://$DIST_OUTPUT_BUCKET-$REGION/$SOLUTION_NAME/$VERSION/ --acl bucket-owner-full-control
-aws s3 sync ./global-s3-assets/ s3://$DIST_OUTPUT_BUCKET-$REGION/$SOLUTION_NAME/$VERSION/ --acl bucket-owner-full-control
+aws s3 sync ./global-s3-assets/ s3://$BUCKET_PREFIX/$SOLUTION_NAME/$VERSION/ --acl bucket-owner-full-control
+aws s3 sync ./regional-s3-assets/ s3://$BUCKET_PREFIX-$REGION/$SOLUTION_NAME/$VERSION/ --acl bucket-owner-full-control
 ```
 This will Upload the InnovationSandbox.template to your global bucket, and the files listed below to your regional bucket:
 
