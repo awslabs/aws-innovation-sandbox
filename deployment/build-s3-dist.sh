@@ -33,7 +33,7 @@ fi
 
 export DIST_VERSION=$3
 export DIST_OUTPUT_BUCKET=$1
-export SOLUTION_ID=SO0030
+export SOLUTION_ID=SO0104
 export SOLUTION_NAME=$2
 export SOLUTION_TRADEMARKEDNAME=$2
 
@@ -95,21 +95,6 @@ npm run build && npm run test
 echo "cdk synth --output=$staging_dist_dir"
 npm run cdk synth
 
-echo '---------------------------******************--------------------------'
-
-echo 'Staging Directory -------------------'
-ls $staging_dist_dir
-
-echo 'Template Directory -------------------'
-ls $template_dist_dir
-
-echo 'Build Directory -------------------'
-ls $build_dist_dir
-
-echo 'Source Directory -------------------'
-ls $source_dir
-
-echo '---------------------------******************--------------------------'
 
 # Remove unnecessary output files
 echo "cd $staging_dist_dir"
@@ -125,23 +110,10 @@ echo "--------------------------------------------------------------------------
 echo "Move outputs from staging to template_dist_dir"
 echo "cp $template_dir/*.template $template_dist_dir/"
 cp $staging_dist_dir/*.template.json $template_dist_dir/
+cp $source_dir/cloudformation_templates/* $template_dist_dir/
 rm *.template.json
 
-echo '---------------------------******************--------------------------'
 
-echo 'Staging Directory -------------------'
-ls $staging_dist_dir
-
-echo 'Template Directory -------------------'
-ls $template_dist_dir
-
-echo 'Build Directory -------------------'
-ls $build_dist_dir
-
-echo 'Source Directory -------------------'
-ls $source_dir
-
-echo '---------------------------******************--------------------------'
 
 # Rename all *.template.json files to *.template
 echo "Rename all *.template.json to *.template"
@@ -151,21 +123,6 @@ for f in $template_dist_dir/*.template.json; do
 done
 
 
-echo '---------------------------******************--------------------------'
-
-echo 'Staging Directory -------------------'
-ls $staging_dist_dir
-
-echo 'Template Directory -------------------'
-ls $template_dist_dir
-
-echo 'Build Directory -------------------'
-ls $build_dist_dir
-
-echo 'Source Directory -------------------'
-ls $source_dir
-
-echo '---------------------------******************--------------------------'
 
 echo "------------------------------------------------------------------------------"
 echo "[Packing] Source code lambda python artifacts and scheduler-cli artifacts"

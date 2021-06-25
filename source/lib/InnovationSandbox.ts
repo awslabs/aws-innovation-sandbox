@@ -14,7 +14,7 @@ export class InnovationSandbox extends cdk.Stack {
     props?: any,
     s?: string
   ) {
-    super(scope, id);
+    super(scope, id, props);
 
  
 
@@ -144,6 +144,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
@@ -213,6 +221,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
@@ -268,6 +284,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
@@ -333,6 +357,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
@@ -388,6 +420,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
@@ -450,6 +490,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
@@ -512,13 +560,21 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W12',
           reason: 'CreatePolicy action does not apply to specific resource'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
 
-    l6_role.attachInlinePolicy(l6_role_policy);
+    l6_role_policy.attachToRole(l6_role);
 
-    l6_role_policy.node.addDependency(l6_role);
+  
 
     const l6 = new lambda.Function(this, "SBX_SCP", {
       code: lambda.Code.fromBucket(solutionsBucket, props["solutionTradeMarkName"] + '/' + props["solutionVersion"] + '/InnovationSandbox.zip'),
@@ -528,8 +584,6 @@ export class InnovationSandbox extends cdk.Stack {
       role:l6_role
     });
 
-    l6.node.addDependency(l6_role_policy);
-
     const l6_cfn = l6.node.defaultChild as lambda.CfnFunction;
 
     l6_cfn.addMetadata('cfn_nag', {
@@ -537,6 +591,14 @@ export class InnovationSandbox extends cdk.Stack {
         {
           id: 'W58',
           reason: 'Lambda function already has permission to write CloudWatch Logs'
+        },
+        {
+          id: 'W89',
+          reason: 'VPC Not setup yet - Default VPC is deleted'
+        },
+        {
+          id: 'W92',
+          reason: 'Setup Lambda - Concurrent executions not needed'
         }
       ]
     });
