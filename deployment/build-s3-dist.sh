@@ -108,12 +108,13 @@ echo "--------------------------------------------------------------------------
 
 # Move outputs from staging to template_dist_dir
 echo "Move outputs from staging to template_dist_dir"
-echo "cp $template_dir/*.template $template_dist_dir/"
+echo "cp $staging_dist_dir/*.template $template_dist_dir/"
+# cp $staging_dist_dir/InnovationSandbox.template.json $template_dist_dir/aws-innovation-sandbox.template.json
+# Renaming InnovationSandbox.template to match AWS Solution Trademark name
+mv $staging_dist_dir/InnovationSandbox.template.json $staging_dist_dir/aws-innovation-sandbox.template.json
 cp $staging_dist_dir/*.template.json $template_dist_dir/
 cp $source_dir/cloudformation_templates/* $template_dist_dir/
 rm *.template.json
-
-
 
 # Rename all *.template.json files to *.template
 echo "Rename all *.template.json to *.template"

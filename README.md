@@ -29,60 +29,7 @@ Clone or download the repository to a local directory on your linux client. Note
 git clone <Git URL>
 ```
 
-### Build
 
-AWS Solutions use two buckets: a bucket for global access to templates, which is accessed via HTTPS, and regional buckets for access to assets within the region, such as Lambda code. You will need:
-
-* One global bucket that is access via the http end point. AWS CloudFormation templates are stored here. Ex. "mybucket"
-* One regional bucket for each region where you plan to deploy using the name of the global bucket as the root, and suffixed with the region name. Ex. "mybucket-us-east-1"
-* Your buckets should be encrypted and disallow public access
-
-**Build the solution**
-
-- Declare environment variables
-```
-export REGION=aws-region-code # the AWS region to launch the solution (e.g. us-east-1)
-export BUCKET_PREFIX=my-bucket-name # bucket where customized code will reside
-export SOLUTION_NAME=my-solution-name # the solution name
-export VERSION=my-version # version number for the customized code
-```
-
-- Create S3 Buckets
-From the AWS CLI
-```
-aws s3 mb s3://$BUCKET_PREFIX --region $REGION
-aws s3 mb s3://$BUCKET_PREFIX-$REGION --region $REGION
-```
-
-From the *deployment* folder in your cloned repo, run build-s3-dist.sh, passing the root name of your bucket (ex. mybucket), name of the solution i.e. aws-innovation-sandbox and the version you are building (ex. v1.3.3). We recommend using a similar version based on the version downloaded from GitHub (ex. GitHub: v1.3.3, your build: v1.3.3.mybuild)
-
-```
-chmod +x build-s3-dist.sh
-source build-s3-dist.sh $BUCKET_PREFIX $SOLUTION_NAME $VERSION
-```
-
-**Upload to your buckets**
-
-```
-aws s3 sync ./global-s3-assets/ s3://$BUCKET_PREFIX/$SOLUTION_NAME/$VERSION/ --acl bucket-owner-full-control
-aws s3 sync ./regional-s3-assets/ s3://$BUCKET_PREFIX-$REGION/$SOLUTION_NAME/$VERSION/ --acl bucket-owner-full-control
-```
-This will Upload the InnovationSandbox.template to your global bucket, and the files listed below to your regional bucket:
-
-The following files will be copied:
-- InnovationSandboxManagementAccount.template  
-- InnovationSandboxSbxAccount.template  
-- InnovationSandboxTransitGatewaySetup.template  
-- innovation_sbx_guardrails_scp.json  
-- innovation_sbx_network_controls_scp.json  
-- InnovationSandbox.zip  
-
-
-## Deploy
-Get the link of the `InnovationSandbox.template` uploaded to your Amazon S3 bucket.
-Deploy the Serverless Image Handler solution to your account by launching a new AWS CloudFormation stack using the S3 link of the `InnovationSandbox.template`
-
-For more info, see the [AWS Innovation Sandbox](<URL>) for deployment instructions, using the link to the InnovationSandbox.template from your bucket, rather than the one for AWS Solutions.
 
 #### Repository Organization
 
@@ -120,6 +67,46 @@ For more info, see the [AWS Innovation Sandbox](<URL>) for deployment instructio
 |- README.md                  - required file for all solutions.
 
 ```
+
+### Build
+
+AWS Solutions use two buckets: a bucket for global access to templates, which is accessed via HTTPS, and regional buckets for access to assets within the region, such as Lambda code. You will need:
+
+* One global bucket that is access via the http end point. AWS CloudFormation templates are stored here. Ex. "mybucket"
+* One regional bucket for each region where you plan to deploy using the name of the global bucket as the root, and suffixed with the region name. Ex. "mybucket-us-east-1"
+* Your buckets should be encrypted and disallow public access
+
+**Build the solution**
+
+From the *deployment* folder in your cloned repo, run build-s3-dist.sh, passing the root name of your bucket (ex. mybucket), name of the solution i.e. aws-innovation-sandbox and the version you are building (ex. v1.3.3). We recommend using a similar version based on the version downloaded from GitHub (ex. GitHub: v1.3.3, your build: v1.3.3.mybuild)
+
+```
+chmod +x build-s3-dist.sh
+build-s3-dist.sh <bucketname> aws-innovation-sandbox <version>
+```
+
+
+**Upload to your buckets**
+
+Upload the InnovationSandbox.template to your global bucket.
+
+Upload the files listed below to your regional bucket in the following pattern:
+
+```
+s3://mybucket-us-east-1/aws-innovation-sandbox/v1.3.3/<file name> (lambda Code)
+```
+
+InnovationSandboxManagementAccount.ts 
+InnovationSandboxSbxAccount.ts
+InnovationSandboxTransitGatewaySetup.ts 
+innovation_sbx_guardrails_scp.json
+innovation_sbx_network_controls_scp.json
+InnovationSandbox.zip
+
+
+## Deploy
+
+See the [AWS Instance Scheduler Implementation Guide](<URL>) for deployment instructions, using the link to the instance-scheduler.template from your bucket, rather than the one for AWS Solutions.
 
 ## CDK Documentation
 
