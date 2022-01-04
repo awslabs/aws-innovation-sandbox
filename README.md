@@ -74,7 +74,7 @@ AWS Solutions use two buckets: a bucket for global access to templates, which is
 
 * One global bucket that is access via the http end point. AWS CloudFormation templates are stored here. Ex. "mybucket"
 * One regional bucket for each region where you plan to deploy using the name of the global bucket as the root, and suffixed with the region name. Ex. "mybucket-us-east-1"
-* Your buckets should be encrypted and disallow public access
+* The regional bucket should be public
 
 **Build the solution**
 
