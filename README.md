@@ -4,7 +4,7 @@ Innovation Sandbox Solution
 
 ## Getting Started
 
-To get started with the AWS Innovation Sandbox, please review the solution documentation. [AWS Innovation Sandbox](<Solution URL>)
+To get started with the AWS Innovation Sandbox, please review the solution documentation. [AWS Innovation Sandbox](https://docs.aws.amazon.com/solutions/latest/aws-innovation-sandbox/welcome.html)
 
 ## Building from GitHub
 ***
@@ -106,7 +106,7 @@ InnovationSandbox.zip
 
 ## Deploy
 
-See the [AWS Instance Scheduler Implementation Guide](<URL>) for deployment instructions, using the link to the instance-scheduler.template from your bucket, rather than the one for AWS Solutions.
+See the [AWS Instance Scheduler Implementation Guide](https://docs.aws.amazon.com/solutions/latest/instance-scheduler/instance-scheduler.pdf) for deployment instructions, using the link to the instance-scheduler.template from your bucket, rather than the one for AWS Solutions.
 
 ## CDK Documentation
 
