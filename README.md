@@ -96,17 +96,16 @@ Upload the files listed below to your regional bucket in the following pattern:
 s3://mybucket-us-east-1/aws-innovation-sandbox/v1.3.3/<file name> (lambda Code)
 ```
 
-InnovationSandboxManagementAccount.ts 
-InnovationSandboxSbxAccount.ts
-InnovationSandboxTransitGatewaySetup.ts 
-innovation_sbx_guardrails_scp.json
-innovation_sbx_network_controls_scp.json
-InnovationSandbox.zip
-
+* `InnovationSandboxManagementAccount.ts` 
+* `InnovationSandboxSbxAccount.ts`
+* `InnovationSandboxTransitGatewaySetup.ts` 
+* `innovation_sbx_guardrails_scp.json`
+* `innovation_sbx_network_controls_scp.json`
+* `InnovationSandbox.zip
 
 ## Deploy
 
-See the [AWS Instance Scheduler Implementation Guide](https://docs.aws.amazon.com/solutions/latest/instance-scheduler/instance-scheduler.pdf) for deployment instructions, using the link to the instance-scheduler.template from your bucket, rather than the one for AWS Solutions.
+See the [AWS Innovation Sandbox Implementation Guide](https://docs.aws.amazon.com/solutions/latest/aws-innovation-sandbox/automated-deployment.html) for deployment instructions, using the CloudFormation templates published to your own S3.
 
 ## CDK Documentation
 
