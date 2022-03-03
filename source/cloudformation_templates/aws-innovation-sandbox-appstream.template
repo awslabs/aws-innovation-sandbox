@@ -45,7 +45,18 @@ Resources:
       Description: AppStream 2.0 Sandbox
       DisplayName: AppStream 2.0 Sandbox Accounts
       Name: !Ref AppStreamStackName
-    
+      UserSettings: 
+        - Action: CLIPBOARD_COPY_FROM_LOCAL_DEVICE
+          Permission: DISABLED 
+        - Action: CLIPBOARD_COPY_TO_LOCAL_DEVICE
+          Permission: DISABLED
+        - Action: FILE_DOWNLOAD
+          Permission: DISABLED
+        - Action: FILE_UPLOAD
+          Permission: DISABLED
+        - Action: PRINTING_TO_LOCAL_DEVICE
+          Permission: DISABLED
+      
 
   AppStreamFleet:
     Type: AWS::AppStream::Fleet
