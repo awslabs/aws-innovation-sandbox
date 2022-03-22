@@ -126,8 +126,8 @@ def validate_inputs(mgmt_name, sbx_name, mgmt_email, sbx_email, mgmt_ou, sbx_ou,
 
     # Validate Emails
 
-    if not re.match('^[a-z0-9\+]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', mgmt_email.lower()) or not re.match(
-            '^[a-z0-9\+]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$', sbx_email.lower()):
+    if not re.match('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', mgmt_email.lower()) or not re.match(
+            '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', sbx_email.lower()):
         error_reason = error_reason + "Invalid Email in the input parameters" + " | "
         error_flag = True
 
