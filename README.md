@@ -101,7 +101,7 @@ s3://mybucket-us-east-1/aws-innovation-sandbox/v1.3.3/<file name> (lambda Code)
 * `InnovationSandboxTransitGatewaySetup.ts` 
 * `innovation_sbx_guardrails_scp.json`
 * `innovation_sbx_network_controls_scp.json`
-* `InnovationSandbox.zip
+* `InnovationSandbox.zip`
 
 ## Deploy
 
