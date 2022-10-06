@@ -47,7 +47,7 @@ export class InnovationSandboxSbxAccount extends cdk.Stack {
 
     const vpc_sbx = new ec2.Vpc(this, "ISSBXVPC", {
       cidr: "192.168.0.0/16",
-      maxAzs: 1,
+      maxAzs: 2,
       subnetConfiguration: [
         {
           cidrMask: 24,
