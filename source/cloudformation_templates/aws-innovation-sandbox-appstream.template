@@ -20,7 +20,7 @@ Parameters:
     Type: String
     Description: (Required) AppStream 2.0 Fleet Name
     Default: AppStreamSandboxFleet
-  AppStreamImageArn:  
+  AppStreamImageName:  
     Type: String
     Default: "Amazon-AppStream2-Sample-Image-02-04-2019"
   AppStreamInstanceType:
@@ -70,7 +70,7 @@ Resources:
       DisplayName: AppStream 2.0 Sandbox Fleet
       EnableDefaultInternetAccess: False
       FleetType: ON_DEMAND
-      ImageName: !Ref AppStreamImageArn
+      ImageName: !Ref AppStreamImageName
       InstanceType: !Ref AppStreamInstanceType
       Name: !Ref AppStreamFleetName
       VpcConfig:
